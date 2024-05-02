@@ -1,11 +1,9 @@
-use crossterm::{
-    cursor::{Hide, MoveTo},
-    execute,
-    style::{Color, Print, ResetColor, SetForegroundColor},
-    terminal::{self, Clear, ClearType},
-};
+use std::io::{stdout, Stdout, Write}; // Add Stdout here
+use crossterm::{execute, terminal, cursor::{Hide, MoveTo}, style::{Color, Print, ResetColor, SetForegroundColor}, terminal::{Clear, ClearType}};
 use rand::Rng;
-use std::{thread, time::Duration, io::{stdout, Stdout}};
+use std::{thread, time::Duration};
+
+
 
 struct Drop {
     x: u16,
@@ -36,7 +34,11 @@ impl Drop {
 
     fn fall(&mut self, height: u16) {
         self.clear(&mut stdout());
-        self.y = (self.y + 1) % height;
+        if self.y + 1 == height {
+            self.y = rand::thread_rng().gen_range(0..height);
+        } else {
+            self.y = self.y + 1;
+        }
         self.draw(&mut stdout());
     }
 }
@@ -54,6 +56,8 @@ fn main() {
         for drop in &mut drops {
             drop.fall(height);
         }
+
+        stdout.flush().unwrap(); // Flush output once per loop iteration
 
         thread::sleep(Duration::from_millis(50));
     }
