@@ -1,3 +1,3 @@
-# zigmatrix
+# winmatrix
 
-erm what the sigma
+ok i give up on ziglang imma just write this in like r ust
